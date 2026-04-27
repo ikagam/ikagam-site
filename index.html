@@ -1,668 +1,1108 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>IKAGAM — Indie Game Studio</title>
-  <meta
-    name="description"
-    content="IKAGAM is an indie game studio focused on racing gameplay and custom physics systems."
-  />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-    rel="stylesheet"
-  />
-  <style>
-    :root {
-      --bg: #090b10;
-      --bg-soft: #0f131b;
-      --panel: rgba(255, 255, 255, 0.04);
-      --panel-2: rgba(255, 255, 255, 0.06);
-      --border: rgba(255, 255, 255, 0.10);
-      --text: #f3f6fb;
-      --muted: #9da7b5;
-      --accent: #66a3ff;
-      --accent-2: #9b7bff;
-      --glow: rgba(102, 163, 255, 0.28);
-      --maxw: 1200px;
-      --radius: 22px;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      margin: 0;
-      font-family: "Inter", sans-serif;
-      background:
-        radial-gradient(circle at 15% 20%, rgba(102, 163, 255, 0.14), transparent 28%),
-        radial-gradient(circle at 85% 15%, rgba(155, 123, 255, 0.12), transparent 30%),
-        linear-gradient(180deg, #07090d 0%, #090b10 100%);
-      color: var(--text);
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.028) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.028) 1px, transparent 1px);
-      background-size: 42px 42px;
-      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.18));
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    .wrap {
-      width: min(var(--maxw), calc(100% - 40px));
-      margin: 0 auto;
-      position: relative;
-      z-index: 1;
-    }
-
-    .nav {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      backdrop-filter: blur(14px);
-      background: rgba(9, 11, 16, 0.72);
-      border-bottom: 1px solid rgba(255,255,255,0.07);
-    }
-
-    .nav-inner {
-      width: min(var(--maxw), calc(100% - 40px));
-      margin: 0 auto;
-      min-height: 72px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-    }
-
-    .logo {
-      font-size: 15px;
-      font-weight: 800;
-      letter-spacing: 0.28em;
-      text-transform: uppercase;
-    }
-
-    .logo span {
-      color: var(--accent);
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 26px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .nav-links a {
-      font-size: 13px;
-      color: var(--muted);
-      transition: color 0.2s ease;
-    }
-
-    .nav-links a:hover {
-      color: var(--text);
-    }
-
-    .hero {
-      padding: 90px 0 40px;
-    }
-
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      gap: 28px;
-      align-items: stretch;
-    }
-
-    .hero-main,
-    .hero-side,
-    .card,
-    .footer-card {
-      border: 1px solid var(--border);
-      background: linear-gradient(180deg, var(--panel), rgba(255,255,255,0.025));
-      border-radius: var(--radius);
-      box-shadow:
-        0 0 0 1px rgba(255,255,255,0.015) inset,
-        0 30px 80px rgba(0,0,0,0.32);
-    }
-
-    .hero-main {
-      padding: 42px;
-      min-height: 520px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero-main::after {
-      content: "";
-      position: absolute;
-      right: -80px;
-      top: 40px;
-      width: 240px;
-      height: 240px;
-      background: radial-gradient(circle, var(--glow), transparent 70%);
-      pointer-events: none;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      color: var(--muted);
-      font-size: 12px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      margin-bottom: 28px;
-    }
-
-    .eyebrow::before {
-      content: "";
-      width: 28px;
-      height: 1px;
-      background: rgba(255,255,255,0.22);
-    }
-
-    h1 {
-      margin: 0;
-      font-size: clamp(52px, 10vw, 112px);
-      line-height: 0.92;
-      letter-spacing: -0.06em;
-      max-width: 700px;
-    }
-
-    .hero-sub {
-      margin: 22px 0 0;
-      max-width: 650px;
-      color: var(--muted);
-      font-size: 18px;
-      line-height: 1.7;
-    }
-
-    .hero-actions {
-      margin-top: 34px;
-      display: flex;
-      gap: 14px;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 48px;
-      padding: 0 18px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      font-weight: 600;
-      font-size: 14px;
-      transition:
-        transform 0.18s ease,
-        border-color 0.18s ease,
-        background 0.18s ease,
-        color 0.18s ease;
-    }
-
-    .btn:hover {
-      transform: translateY(-1px);
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
-      color: white;
-      border-color: transparent;
-      box-shadow: 0 0 24px rgba(102,163,255,0.16);
-    }
-
-    .btn-secondary {
-      color: var(--text);
-      background: rgba(255,255,255,0.03);
-    }
-
-    .hero-side {
-      padding: 22px;
-      display: grid;
-      grid-template-rows: auto auto 1fr;
-      gap: 14px;
-      min-height: 520px;
-    }
-
-    .status-box,
-    .mini-panel {
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.03);
-      border-radius: 18px;
-      padding: 18px;
-    }
-
-    .status-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 10px;
-    }
-
-    .status-label {
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-      color: var(--muted);
-    }
-
-    .dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: #53d769;
-      box-shadow: 0 0 14px rgba(83, 215, 105, 0.6);
-      flex: 0 0 auto;
-    }
-
-    .status-value {
-      font-size: 22px;
-      font-weight: 700;
-      margin: 0;
-    }
-
-    .status-text {
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.6;
-      margin: 8px 0 0;
-    }
-
-    .mini-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
-
-    .mini-k {
-      color: var(--muted);
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      margin-bottom: 8px;
-    }
-
-    .mini-v {
-      font-size: 17px;
-      font-weight: 700;
-      line-height: 1.35;
-    }
-
-    .placeholder {
-      position: relative;
-      overflow: hidden;
-      min-height: 100%;
-      display: grid;
-      place-items: center;
-      text-align: center;
-    }
-
-    .placeholder::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(135deg, rgba(255,255,255,0.03), transparent 55%),
-        radial-gradient(circle at 70% 20%, rgba(102,163,255,0.16), transparent 22%),
-        radial-gradient(circle at 30% 80%, rgba(155,123,255,0.12), transparent 20%);
-      pointer-events: none;
-    }
-
-    .placeholder-box {
-      position: relative;
-      z-index: 1;
-      padding: 26px;
-    }
-
-    .placeholder-mark {
-      font-size: clamp(46px, 8vw, 72px);
-      font-weight: 800;
-      letter-spacing: -0.05em;
-      opacity: 0.18;
-      margin-bottom: 10px;
-    }
-
-    .placeholder-text {
-      color: var(--muted);
-      font-size: 14px;
-      max-width: 280px;
-      line-height: 1.6;
-      margin: 0 auto;
-    }
-
-    .section {
-      padding: 20px 0;
-    }
-
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-    }
-
-    .card {
-      padding: 24px;
-    }
-
-    .card-title {
-      margin: 0 0 14px;
-      font-size: 13px;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-    }
-
-    .card h2,
-    .card h3 {
-      margin: 0 0 14px;
-      font-size: 28px;
-      line-height: 1.08;
-      letter-spacing: -0.04em;
-    }
-
-    .card p {
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.75;
-      font-size: 15px;
-    }
-
-    .about-row {
-      display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 20px;
-    }
-
-    .list {
-      display: grid;
-      gap: 14px;
-      margin-top: 18px;
-    }
-
-    .list-item {
-      padding: 14px 16px;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      background: rgba(255,255,255,0.025);
-    }
-
-    .list-item strong {
-      display: block;
-      font-size: 14px;
-      margin-bottom: 6px;
-    }
-
-    .list-item span {
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.6;
-    }
-
-    .contact {
-      padding: 26px 0 90px;
-    }
-
-    .footer-card {
-      padding: 28px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 18px;
-      flex-wrap: wrap;
-    }
-
-    .footer-title {
-      margin: 0 0 8px;
-      font-size: 30px;
-      letter-spacing: -0.04em;
-    }
-
-    .footer-text {
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.7;
-      font-size: 15px;
-    }
-
-    .mail {
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--text);
-      word-break: break-word;
-    }
-
-    .mail:hover {
-      color: var(--accent);
-    }
-
-    .copyright {
-      padding: 18px 0 34px;
-      color: #6f7a8a;
-      font-size: 13px;
-      text-align: center;
-    }
-
-    @media (max-width: 980px) {
-      .hero-grid,
-      .cards,
-      .about-row {
-        grid-template-columns: 1fr;
-      }
-
-      .hero-main,
-      .hero-side {
-        min-height: auto;
-      }
-
-      .hero-main {
-        padding: 28px;
-      }
-
-      .nav-inner {
-        min-height: auto;
-        padding: 16px 0;
-        align-items: flex-start;
-        flex-direction: column;
-      }
-
-      .nav-links {
-        gap: 14px 18px;
-      }
-    }
-
-    @media (max-width: 640px) {
-      .wrap {
-        width: min(var(--maxw), calc(100% - 24px));
-      }
-
-      .hero {
-        padding-top: 42px;
-      }
-
-      .hero-main,
-      .hero-side,
-      .card,
-      .footer-card {
-        border-radius: 18px;
-      }
-
-      .hero-main,
-      .hero-side,
-      .card,
-      .footer-card {
-        padding-left: 18px;
-        padding-right: 18px;
-      }
-
-      .hero-sub {
-        font-size: 16px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IKAGAM LLC — Game Development</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Barlow+Condensed:ital,wght@0,200;0,300;0,400;1,200&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #111111;
+    --dark: #f4f4f2;
+    --panel: #ffffff;
+    --border: #dcdcd8;
+    --accent: #c8102e;
+    --accent2: #8a0a1e;
+    --muted: #888884;
+    --text: #333330;
+    --white: #ffffff;
+    --font-display: 'Rajdhani', sans-serif;
+    --font-body: 'Barlow Condensed', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--white);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 18px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 60px;
+    background: rgba(248,248,246,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: 0.2em;
+    color: var(--black);
+    text-decoration: none;
+  }
+
+  .nav-logo span { color: var(--accent); }
+
+  .nav-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: var(--font-display);
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--accent); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 60px 80px;
+    position: relative;
+    overflow: hidden;
+    background: #f0f0ee;
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,0,0,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,0,0,0.06) 1px, transparent 1px);
+    background-size: 80px 80px;
+    mask-image: linear-gradient(to bottom, transparent 0%, black 30%, black 70%, transparent 100%);
+  }
+
+  .hero-scanlines {
+    display: none;
+  }
+
+  /* Animated speed lines */
+  .hero-lines {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  .hero-lines::before {
+    content: '';
+    position: absolute;
+    top: 38%;
+    left: -100%;
+    width: 200%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    animation: speedline 5s ease-in-out infinite;
+    opacity: 0.6;
+  }
+
+  .hero-lines::after {
+    content: '';
+    position: absolute;
+    top: 52%;
+    left: -100%;
+    width: 200%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(200,16,46,0.3), transparent);
+    animation: speedline 5s ease-in-out infinite 2s;
+    opacity: 0.4;
+  }
+
+  @keyframes speedline {
+    0% { transform: translateX(-20%); opacity: 0; }
+    20% { opacity: 0.6; }
+    80% { opacity: 0.6; }
+    100% { transform: translateX(20%); opacity: 0; }
+  }
+
+  .hero-eyebrow {
+    font-family: var(--font-display);
+    font-size: 12px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  .hero-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(60px, 10vw, 140px);
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+    color: var(--black);
+    margin-bottom: 30px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.4s forwards;
+  }
+
+  .hero-title .line2 {
+    display: block;
+    color: #aaa;
+    font-weight: 300;
+  }
+
+  .hero-sub {
+    max-width: 500px;
+    font-size: 16px;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    color: #777;
+    line-height: 1.7;
+    margin-bottom: 50px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.6s forwards;
+  }
+
+  .hero-ctas {
+    display: flex;
+    gap: 20px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.8s forwards;
+  }
+
+  .btn {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 14px 32px;
+    border: 1px solid;
+    transition: all 0.25s;
+    cursor: pointer;
+    display: inline-block;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #ffffff;
+  }
+
+  .btn-primary:hover {
+    background: var(--accent2);
+    border-color: var(--accent2);
+    color: #ffffff;
+  }
+
+  .btn-ghost {
+    background: transparent;
+    border-color: #bbb;
+    color: #777;
+  }
+
+  .btn-ghost:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .hero-corner {
+    position: absolute;
+    top: 100px;
+    right: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    opacity: 0;
+    animation: fadeIn 1s 1s forwards;
+  }
+
+  .hero-corner-label {
+    font-family: var(--font-display);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #aaa;
+  }
+
+  .hero-corner-value {
+    font-family: var(--font-display);
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    color: var(--text);
+  }
+
+  .corner-divider {
+    width: 40px;
+    height: 1px;
+    background: #ddd;
+    margin: 8px 0;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* SECTIONS */
+  section { padding: 120px 60px; }
+
+  .section-label {
+    font-family: var(--font-display);
+    font-size: 11px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-label::before {
+    content: '';
+    width: 30px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(36px, 5vw, 64px);
+    color: var(--black);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 60px;
+  }
+
+  /* ABOUT COMPANY */
+  .about-company {
+    background: var(--white);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .about-company-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .about-body {
+    font-size: 17px;
+    font-weight: 300;
+    letter-spacing: 0.03em;
+    color: var(--text);
+    line-height: 1.8;
+  }
+
+  .about-body p { margin-bottom: 20px; }
+
+  .about-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+  }
+
+  .stat-box {
+    background: var(--dark);
+    border: 1px solid var(--border);
+    padding: 32px 28px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stat-box::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+  }
+
+  .stat-box:hover::after { transform: scaleX(1); }
+
+  .stat-num {
+    font-family: var(--font-display);
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--black);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .stat-num span { color: var(--accent); }
+
+  .stat-label {
+    font-family: var(--font-display);
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* GAME SECTION */
+  .game-section {
+    background: var(--dark);
+    position: relative;
+    overflow: hidden;
+    border-top: 1px solid var(--border);
+  }
+
+  .game-bg-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 280px;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(200,16,46,0.06);
+    white-space: nowrap;
+    pointer-events: none;
+    letter-spacing: 0.1em;
+    user-select: none;
+  }
+
+  .game-inner {
+    position: relative;
+    z-index: 1;
+  }
+
+  .game-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    padding: 60px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 2px;
+    box-shadow: 0 2px 24px rgba(0,0,0,0.06);
+  }
+
+  .game-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--accent);
+  }
+
+  .game-card-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 60px;
+    align-items: start;
+  }
+
+  .game-title-block { margin-bottom: 30px; }
+
+  .game-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-display);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.8); }
+  }
+
+  .game-name {
+    font-family: var(--font-display);
+    font-size: clamp(40px, 6vw, 80px);
+    font-weight: 700;
+    color: var(--black);
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+
+  .game-tagline {
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 200;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .game-desc {
+    font-size: 17px;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--text);
+    margin: 30px 0;
+  }
+
+  .game-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tag {
+    font-family: var(--font-display);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    transition: all 0.2s;
+  }
+
+  .tag:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .game-specs {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .spec-row {
+    background: var(--dark);
+    border: 1px solid var(--border);
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .spec-key {
+    font-family: var(--font-display);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .spec-val {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--black);
+  }
+
+  /* ABOUT ME */
+  .about-me {
+    background: var(--white);
+    border-top: 1px solid var(--border);
+  }
+
+  .about-me-grid {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .about-photo-wrap {
+    position: relative;
+  }
+
+  .about-photo-frame {
+    position: relative;
+    overflow: hidden;
+
+    aspect-ratio: 3/4;
+  }
+
+  .about-photo-frame img {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    
+    object-fit: cover;
+    object-position: top;
+    display: block;
+    filter: grayscale(15%) contrast(1.05);
+  }
+
+  .about-photo-frame::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 60%, rgba(255,255,255,0.5));
+  }
+
+  .photo-border {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    right: -12px;
+    bottom: -12px;
+    border: 1px solid var(--accent);
+    opacity: 0.25;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .about-name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(32px, 4vw, 52px);
+    color: var(--black);
+    letter-spacing: -0.01em;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .about-role {
+    font-family: var(--font-display);
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 40px;
+  }
+
+  .about-bio {
+    font-size: 17px;
+    font-weight: 300;
+    line-height: 1.85;
+    color: var(--text);
+    margin-bottom: 40px;
+  }
+
+  .about-bio p { margin-bottom: 18px; }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin-top: 40px;
+  }
+
+  .skill-item {
+    background: var(--dark);
+    border: 1px solid var(--border);
+    padding: 20px;
+    transition: border-color 0.2s;
+  }
+
+  .skill-item:hover { border-color: var(--accent); }
+
+  .skill-name {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--black);
+    margin-bottom: 4px;
+  }
+
+  .skill-tools {
+    font-size: 12px;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+  }
+
+  /* CONTACT */
+  .contact-section {
+    background: #f0f0ee;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    padding: 120px 60px;
+  }
+
+  .contact-section .section-label { justify-content: center; color: var(--accent); }
+  .contact-section .section-label::before { background: var(--accent); }
+
+  .contact-section .section-title { color: var(--black); margin-bottom: 10px; }
+
+  .contact-email {
+    font-family: var(--font-display);
+    font-size: clamp(24px, 4vw, 48px);
+    font-weight: 700;
+    color: var(--black);
+    text-decoration: none;
+    letter-spacing: -0.01em;
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 4px;
+    transition: color 0.2s;
+    display: inline-block;
+    margin: 30px 0 60px;
+  }
+
+  .contact-email:hover { color: var(--accent); }
+
+  .contact-section .btn-ghost {
+    border-color: #bbb;
+    color: #777;
+  }
+
+  .contact-section .btn-ghost:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* FOOTER */
+  footer {
+    background: #e8e8e6;
+    border-top: 1px solid #d0d0cc;
+    padding: 40px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-logo {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: 0.2em;
+    color: #999;
+  }
+
+  .footer-logo span { color: var(--accent); }
+
+  .footer-copy {
+    font-family: var(--font-display);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    color: #aaa;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 24px;
+  }
+
+  .footer-links a {
+    font-family: var(--font-display);
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #aaa;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--accent); }
+
+  /* SCROLL REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s, transform 0.7s;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ACCENT CORNER BRACKETS */
+  .bracket-wrap {
+    position: relative;
+    padding: 30px;
+  }
+
+  .bracket-wrap::before, .bracket-wrap::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-color: var(--accent);
+    border-style: solid;
+    opacity: 0.4;
+  }
+
+  .bracket-wrap::before { top: 0; left: 0; border-width: 1px 0 0 1px; }
+  .bracket-wrap::after  { bottom: 0; right: 0; border-width: 0 1px 1px 0; }
+
+
+  .screen-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  aspect-ratio: 16 / 9;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.screen-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.screen-card video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+</style>
 </head>
 <body>
-  <header class="nav">
-    <div class="nav-inner">
-      <a class="logo" href="#top">IKA<span>GAM</span></a>
-      <nav class="nav-links" aria-label="Primary">
-        <a href="#studio">Studio</a>
-        <a href="#project">Project</a>
-        <a href="#about">About</a>
-        <a href="#contact">Contact</a>
-      </nav>
+
+
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">IKA<span>GAM</span></a>
+  <ul class="nav-links">
+    <li><a href="#company">Studio</a></li>
+    <li><a href="thegame.html">Game</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-grid"></div>
+  <div class="hero-scanlines"></div>
+  <div class="hero-lines"></div>
+
+  <div class="hero-corner">
+    <span class="hero-corner-label">Status</span>
+    <span class="hero-corner-value">In Development</span>
+    <div class="corner-divider"></div>
+    <span class="hero-corner-label">Type</span>
+    <span class="hero-corner-value">Racing / Sim</span>
+    <div class="corner-divider"></div>
+    <span class="hero-corner-label">Developer</span>
+    <span class="hero-corner-value">Solo Dev</span>
+  </div>
+
+  <div class="hero-eyebrow">Game Development</div>
+  <h1 class="hero-title">
+    IKAGAM<br>
+    <span class="line2">LLC</span>
+  </h1>
+  <p class="hero-sub">Building a high-fidelity racing experience rooted in a passion for motion, precision, and the feeling of speed.</p>
+  <div class="hero-ctas">
+    <a href="#game" class="btn btn-primary">Upcoming Game</a>
+    <a href="#about" class="btn btn-ghost">About</a>
+  </div>
+</section>
+
+<!-- COMPANY -->
+<section class="about-company" id="company">
+  <div class="about-company-grid">
+    <div>
+      <div class="section-label reveal">About IKAGAM</div>
+      <h2 class="section-title reveal">Made from<br>Scratch.</h2>
+      <div class="about-body reveal">
+        <p>IKAGAM LLC is a one-person independent game development project. One developer — design, levels, 3D models, textures, code, game architecture, custom tools. Everything built from scratch, with full control over every decision.</p>
+        <p>The current title has been in development for over three years. It runs on a custom physics engine and custom tooling built specifically for this project — not off-the-shelf solutions, but systems designed from the ground up to get the hovercraft feel exactly right.</p>
+        <p>The obsession with racing physics comes from real experience — years of karting, understanding how a vehicle actually behaves at the limit. That knowledge is baked into every layer of the simulation.</p>
+      </div>
     </div>
-  </header>
-
-  <main id="top" class="wrap">
-    <section class="hero">
-      <div class="hero-grid">
-        <div class="hero-main">
-          <div class="eyebrow">Indie Game Studio</div>
-          <h1>IKAGAM</h1>
-          <p class="hero-sub">
-            Indie game studio focused on racing gameplay and custom physics systems.
-          </p>
-          <div class="hero-actions">
-            <a class="btn btn-primary" href="#project">Current Project</a>
-            <a class="btn btn-secondary" href="#about">About</a>
-          </div>
-        </div>
-
-        <aside class="hero-side" aria-label="Project status">
-          <div class="status-box">
-            <div class="status-top">
-              <div class="status-label">Status</div>
-              <div class="dot" aria-hidden="true"></div>
-            </div>
-            <p class="status-value">In Development</p>
-            <p class="status-text">
-              Current project: unannounced game built in Unreal Engine 5.
-            </p>
-          </div>
-
-          <div class="mini-grid">
-            <div class="mini-panel">
-              <div class="mini-k">Genre</div>
-              <div class="mini-v">Racing</div>
-            </div>
-            <div class="mini-panel">
-              <div class="mini-k">Tech</div>
-              <div class="mini-v">Custom Physics</div>
-            </div>
-          </div>
-
-          <div class="mini-panel placeholder">
-            <div class="placeholder-box">
-              <div class="placeholder-mark">01</div>
-              <p class="placeholder-text">
-                Temporary landing page. Visual identity and project media will be added next.
-              </p>
-            </div>
-          </div>
-        </aside>
+    <div class="about-stats reveal">
+      <div class="stat-box">
+        <div class="stat-num">3<span>+</span></div>
+        <div class="stat-label">Current game is three+ years in development</div>
       </div>
-    </section>
-
-    <section id="studio" class="section">
-      <div class="cards">
-        <article class="card">
-          <div class="card-title">Studio</div>
-          <h2>Small and focused.</h2>
-          <p>
-            IKAGAM is a small independent studio built around gameplay feel, technical experimentation,
-            and direct control over the product.
-          </p>
-        </article>
-
-        <article class="card" id="project">
-          <div class="card-title">Project</div>
-          <h2>Unannounced game.</h2>
-          <p>
-            The current title is an unannounced racing project in active development, built in Unreal Engine 5
-            with a strong emphasis on motion, handling, and custom systems.
-          </p>
-        </article>
-
-        <article class="card">
-          <div class="card-title">Approach</div>
-          <h2>Custom tech stack.</h2>
-          <p>
-            Development includes custom tools, technical workflows, and physics-driven iteration rather than
-            relying purely on default out-of-the-box solutions.
-          </p>
-        </article>
+      <div class="stat-box">
+        <div class="stat-num">01<span>.</span></div>
+        <div class="stat-label">Solo developer</div>
       </div>
-    </section>
-
-    <section id="about" class="section">
-      <div class="about-row">
-        <article class="card">
-          <div class="card-title">About</div>
-          <h3>Developer background</h3>
-          <p>
-            The studio is founded and run by Igor Kamennoy. Current work is centered on an original racing game,
-            including design direction, technical development, and production.
-          </p>
-        </article>
-
-        <article class="card">
-          <div class="card-title">Focus</div>
-          <h3>What is being built now</h3>
-          <div class="list">
-            <div class="list-item">
-              <strong>Gameplay foundation</strong>
-              <span>Racing-oriented mechanics with emphasis on speed, control, and vehicle feel.</span>
-            </div>
-            <div class="list-item">
-              <strong>Technology</strong>
-              <span>Unreal Engine 5, custom physics systems, and project-specific tools.</span>
-            </div>
-            <div class="list-item">
-              <strong>Presentation</strong>
-              <span>Project name and full reveal are intentionally withheld for now.</span>
-            </div>
-          </div>
-        </article>
+      <div class="stat-box">
+        <div class="stat-num"><span style="font-size:28px;line-height:1.2">Custom</span></div>
+        <div class="stat-label">Physics & Tools</div>
       </div>
-    </section>
+      <div class="stat-box">
+        <div class="stat-num"><span style="font-size:28px;line-height:1.2">Real</span></div>
+        <div class="stat-label">Karting and sports experience help to make the feel of the game</div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <section id="contact" class="contact">
-      <div class="footer-card">
+<!-- GAME -->
+<section class="game-section" id="game">
+  <div class="game-bg-text">HOVER</div>
+  <div class="game-inner">
+    <div class="section-label reveal">Upcoming Title</div>
+    <div class="game-card reveal">
+      <div class="game-card-grid">
         <div>
-          <div class="card-title">Contact</div>
-          <h2 class="footer-title">Get in touch</h2>
-          <p class="footer-text">
-            For business inquiries, partnerships, or general contact.
+          <div class="game-title-block">
+            <div class="game-status">
+              <div class="status-dot"></div>
+              In Active Development
+            </div>
+            <div class="game-name">Yet Untitled
+              <br>
+              <span class="line2">Hover Racing Game</span></div>
+            <div class="game-tagline">Futuristic Hovercraft Racing — Near Future</div>
+          </div>
+
+          <p class="game-desc">
+            A simulation-grade racing title set in the near future, where futuristic hovercraft prototypes compete across vast open landscapes — sweeping mountain passes, coastal cliffs, and stone valleys carved by wind.<br><br>
+            Time trial and drift disciplines. Realistic vehicle handling. Environments that feel alive.
           </p>
+
+
+          <div style="margin-top:30px;">
+            <a href="thegame.html" class="btn btn-primary">
+              View Game Details
+            </a>
+          </div>          
+          
+          <div>  
+            <br>
+          </div>
+
+          <div class="game-tags">
+            <span class="tag">Racing Sim</span>
+            <span class="tag">Hovercraft</span>
+            <span class="tag">Time Trial</span>
+            <span class="tag">Drift</span>
+            <span class="tag">Varied Tracks</span>
+            <span class="tag">Near Future</span>
+            <span class="tag">Unreal Engine</span>
+          </div>
         </div>
 
-        <a class="mail" href="mailto:contact@ikagam.com">contact@ikagam.com</a>
+        <div class="game-specs">
+          <div class="spec-row">
+            <span class="spec-key">Vehicle Type</span>
+            <span class="spec-val">Futuristic Hovercraft</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-key">Setting</span>
+            <span class="spec-val">Near Future</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-key">Environments</span>
+            <span class="spec-val">Urban & Natural Environments</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-key">Game Modes</span>
+            <span class="spec-val">Time Trial · Drift · And More</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-key">Approach</span>
+            <span class="spec-val">Simulation-First</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-key">Engine</span>
+            <span class="spec-val">Unreal Engine</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-key">Platform</span>
+            <span class="spec-val">Steam</span>
+          </div>
+        </div>
       </div>
-    </section>
 
-    <div class="copyright">© 2026 IKAGAM. All rights reserved.</div>
-  </main>
+      <!-- MEDIA PLACEHOLDER 
+
+      <!-- 
+      <div style="margin-top:48px;border-top:1px solid var(--border);padding-top:40px;">
+        <div style="font-family:var(--font-display);font-size:11px;letter-spacing:0.25em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;">Screenshots & Media</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:2px;">
+          <div style="background:var(--dark);border:1px solid var(--border);aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;color:var(--muted);font-family:var(--font-display);font-size:11px;letter-spacing:0.15em;text-transform:uppercase;">Coming Soon</div>
+          <div style="background:var(--dark);border:1px solid var(--border);aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;color:var(--muted);font-family:var(--font-display);font-size:11px;letter-spacing:0.15em;text-transform:uppercase;">Coming Soon</div>
+          <div style="background:var(--dark);border:1px solid var(--border);aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;color:var(--muted);font-family:var(--font-display);font-size:11px;letter-spacing:0.15em;text-transform:uppercase;">Coming Soon</div>
+        </div>
+      </div>
+
+      -->
+
+      <div style="margin-top:48px;border-top:1px solid var(--border);padding-top:40px;">
+        <div style="font-family:var(--font-display);font-size:11px;letter-spacing:0.25em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;">
+          Screenshots & Media
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:2px;">
+
+          <div class="screen-card">
+            <img src="images/screen1.jpg">
+          </div>
+
+          <div class="screen-card">
+            <video autoplay muted loop playsinline>
+              <source src="images/preview.mp4" type="video/mp4">
+            </video>
+          </div>
+
+          <div class="screen-card">
+            <img src="images/screen2.jpg">
+          </div>
+
+
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT ME -->
+<section class="about-me" id="about">
+  <div class="section-label reveal">The Developer</div>
+  <h2 class="section-title reveal">Igor<br>Kamennoy</h2>
+
+  <div class="about-me-grid reveal">
+    <div class="about-photo-wrap">
+      <div class="about-photo-frame">
+        <img src="images/igor.jpg" alt="Igor Kamennoy">
+      </div>
+      <div class="photo-border"></div>
+    </div>
+
+    <div>
+      <div class="about-role">Founder & Developer — IKAGAM LLC</div>
+      <div class="about-bio">
+      <p>I am the sole developer behind IKAGAM LLC and the upcoming hover racing game. I bring over 18 years of professional experience in the games industry, working as a 2D and 3D artist and animator for major game companies worldwide, with a strong focus on animation and performance optimization.</p>
+      <p>My background covers the full art and animation pipeline — including character and FX animation, 3D modeling, rigging, and game-ready asset production. Earlier in my career, I worked as a 3D artist on racing and action titles, which directly informs this project.</p>
+      <p>IKAGAM LLC is the natural next step — taking that accumulated experience and applying it to an original game, built from the ground up as a solo developer.</p>      </div>
+
+      <div class="skills-grid">
+        <div class="skill-item">
+          <div class="skill-name">2D Animation</div>
+          <div class="skill-tools">Character · FX · UI</div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name">3D Art</div>
+          <div class="skill-tools">Modeling · Rigging · Animation</div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name">Game Dev</div>
+          <div class="skill-tools">Design · Pipeline · C++ code · Blueprints</div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name">Art Direction</div>
+          <div class="skill-tools">Concept · Visual Dev</div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name">Racing</div>
+          <div class="skill-tools">Sim · Physics · Feel</div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name">Solo Dev</div>
+          <div class="skill-tools">End-to-End Production</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- CONTACT -->
+<section class="contact-section" id="contact">
+  <div class="section-label">Contact</div>
+
+  <h2 class="section-title" style="margin-bottom:10px;">
+    Get in touch
+  </h2>
+
+  <p style="color:#888;font-size:16px;font-weight:300;letter-spacing:0.05em;margin-bottom:10px;">
+    Press inquiries, partnerships, collaboration.
+  </p>
+
+  <a href="mailto:contact@ikagam.com" class="contact-email">
+    contact@ikagam.com
+  </a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">IKA<span>GAM</span> LLC</div>
+
+  <div class="footer-copy">
+    © 2026 IKAGAM LLC. All rights reserved.
+  </div>
+
+  <div class="footer-links">
+    <a href="#company">Studio</a>
+    <a href="#game">Game</a>
+    <a href="#about">About</a>
+    <a href="privacy.html">Privacy Policy</a>
+  </div>
+</footer>
+
+
+
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Nav active state
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 200) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + current ? 'var(--accent)' : '';
+    });
+  });
+</script>
+
 </body>
 </html>

@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IKAGAM LLC — The Game</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Barlow+Condensed:ital,wght@0,200;0,300;0,400;1,200&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --black: #111111;
+  --dark: #f4f4f2;
+  --panel: #ffffff;
+  --border: #dcdcd8;
+  --accent: #c8102e;
+  --accent2: #8a0a1e;
+  --muted: #888884;
+  --text: #333330;
+  --white: #ffffff;
+  --font-display: 'Rajdhani', sans-serif;
+  --font-body: 'Barlow Condensed', sans-serif;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--white);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 60px;
+  background: rgba(248,248,246,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-logo {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: 0.2em;
+  color: var(--black);
+  text-decoration: none;
+}
+
+.nav-logo span { color: var(--accent); }
+
+.nav-links {
+  display: flex;
+  gap: 40px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-family: var(--font-display);
+  font-size: 13px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  color: var(--accent);
+}
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 60px 80px;
+  position: relative;
+  overflow: hidden;
+  background: #f0f0ee;
+}
+
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,0,0,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.06) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: linear-gradient(to bottom, transparent 0%, black 30%, black 70%, transparent 100%);
+}
+
+.hero-lines {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.hero-lines::before {
+  content: '';
+  position: absolute;
+  top: 38%;
+  left: -100%;
+  width: 200%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  animation: speedline 5s ease-in-out infinite;
+  opacity: 0.6;
+}
+
+.hero-lines::after {
+  content: '';
+  position: absolute;
+  top: 52%;
+  left: -100%;
+  width: 200%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(200,16,46,0.3), transparent);
+  animation: speedline 5s ease-in-out infinite 2s;
+  opacity: 0.4;
+}
+
+.hero-bg-word {
+  position: absolute;
+  right: -40px;
+  bottom: 40px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(120px, 22vw, 330px);
+  line-height: 0.8;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(200,16,46,0.08);
+  letter-spacing: 0.04em;
+  pointer-events: none;
+  user-select: none;
+}
+
+@keyframes speedline {
+  0% { transform: translateX(-20%); opacity: 0; }
+  20% { opacity: 0.6; }
+  80% { opacity: 0.6; }
+  100% { transform: translateX(20%); opacity: 0; }
+}
+
+.hero-eyebrow {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-display);
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 20px;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.2s forwards;
+}
+
+.hero-title {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(58px, 10vw, 138px);
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  color: var(--black);
+  margin-bottom: 30px;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.4s forwards;
+}
+
+.hero-title .line2 {
+  display: block;
+  color: #aaa;
+  font-weight: 300;
+}
+
+.hero-sub {
+  position: relative;
+  z-index: 1;
+  max-width: 560px;
+  font-size: 17px;
+  font-weight: 300;
+  letter-spacing: 0.05em;
+  color: #777;
+  line-height: 1.7;
+  margin-bottom: 50px;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.6s forwards;
+}
+
+.hero-ctas {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: 20px;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.8s forwards;
+}
+
+.btn {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 14px 32px;
+  border: 1px solid;
+  transition: all 0.25s;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: #ffffff;
+}
+
+.btn-ghost {
+  background: transparent;
+  border-color: #bbb;
+  color: #777;
+}
+
+.btn-ghost:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.hero-corner {
+  position: absolute;
+  top: 100px;
+  right: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  opacity: 0;
+  animation: fadeIn 1s 1s forwards;
+}
+
+.hero-corner-label {
+  font-family: var(--font-display);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #aaa;
+}
+
+.hero-corner-value {
+  font-family: var(--font-display);
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  color: var(--text);
+}
+
+.corner-divider {
+  width: 40px;
+  height: 1px;
+  background: #ddd;
+  margin: 8px 0;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* COMMON */
+section { padding: 120px 60px; }
+
+.section-label {
+  font-family: var(--font-display);
+  font-size: 11px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.section-label::before {
+  content: '';
+  width: 30px;
+  height: 1px;
+  background: var(--accent);
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(36px, 5vw, 64px);
+  color: var(--black);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin-bottom: 60px;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s, transform 0.7s;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* OVERVIEW */
+.overview {
+  background: var(--white);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.overview-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 80px;
+  align-items: start;
+}
+
+.overview-text {
+  font-size: 18px;
+  font-weight: 300;
+  letter-spacing: 0.03em;
+  color: var(--text);
+  line-height: 1.85;
+}
+
+.overview-text p { margin-bottom: 20px; }
+
+.specs-panel {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2px;
+}
+
+.spec-row {
+  background: var(--dark);
+  border: 1px solid var(--border);
+  padding: 22px 26px;
+}
+
+.spec-key {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.spec-val {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--black);
+}
+
+/* SCREENSHOTS */
+.media {
+  background: var(--dark);
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.media-bg-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 240px;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(200,16,46,0.06);
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+}
+
+.media-inner {
+  position: relative;
+  z-index: 1;
+}
+
+.screens-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+}
+
+.screen-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  aspect-ratio: 16 / 9;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.screen-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* если картинки пока нет */
+.screen-placeholder {
+  font-family: var(--font-display);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.screen-card::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s;
+}
+
+.screen-card:hover::after {
+  transform: scaleX(1);
+}
+
+/* FEATURES */
+.features {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+}
+
+.feature-card {
+  background: var(--dark);
+  border: 1px solid var(--border);
+  padding: 36px 32px;
+  min-height: 230px;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.feature-card:hover {
+  background: #fafafa;
+  border-color: var(--accent);
+}
+
+.feature-num {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+  margin-bottom: 24px;
+}
+
+.feature-title {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--black);
+  line-height: 1;
+  margin-bottom: 16px;
+}
+
+.feature-text {
+  font-size: 15px;
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  line-height: 1.75;
+}
+
+/* ROADMAP */
+.roadmap {
+  background: #f0f0ee;
+  border-bottom: 1px solid var(--border);
+}
+
+.roadmap-grid {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 80px;
+  align-items: start;
+}
+
+.roadmap-note {
+  font-size: 17px;
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  line-height: 1.8;
+}
+
+.roadmap-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2px;
+}
+
+.roadmap-item {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 24px;
+  align-items: center;
+  background: var(--white);
+  border: 1px solid var(--border);
+  padding: 22px 26px;
+}
+
+.roadmap-time {
+  font-family: var(--font-display);
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.roadmap-title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--black);
+  line-height: 1.1;
+}
+
+.roadmap-desc {
+  font-size: 14px;
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+/* CONTACT */
+.contact-section {
+  background: var(--white);
+  text-align: center;
+  padding: 120px 60px;
+}
+
+.contact-section .section-label {
+  justify-content: center;
+}
+
+.contact-email {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 4vw, 48px);
+  font-weight: 700;
+  color: var(--black);
+  text-decoration: none;
+  letter-spacing: -0.01em;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 4px;
+  transition: color 0.2s;
+  display: inline-block;
+  margin: 30px 0 60px;
+}
+
+.contact-email:hover { color: var(--accent); }
+
+/* FOOTER */
+footer {
+  background: #e8e8e6;
+  border-top: 1px solid #d0d0cc;
+  padding: 40px 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-logo {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: 0.2em;
+  color: #999;
+}
+
+.footer-logo span { color: var(--accent); }
+
+.footer-copy {
+  font-family: var(--font-display);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: #aaa;
+}
+
+.footer-links {
+  display: flex;
+  gap: 24px;
+}
+
+.footer-links a {
+  font-family: var(--font-display);
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #aaa;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover { color: var(--accent); }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  nav {
+    padding: 18px 24px;
+  }
+
+  .nav-links {
+    gap: 18px;
+  }
+
+  .hero,
+  section {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .hero-corner {
+    display: none;
+  }
+
+  .overview-grid,
+  .roadmap-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .features-grid,
+  .screens-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .roadmap-item {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  footer {
+    flex-direction: column;
+    gap: 18px;
+    text-align: center;
+    padding: 36px 24px;
+  }
+}
+
+@media (max-width: 620px) {
+  .nav-links {
+    display: none;
+  }
+
+  .hero-title {
+    font-size: clamp(54px, 16vw, 90px);
+  }
+
+  .hero-ctas {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+
+.screen-card video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+</style>
+</head>
+
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">IKA<span>GAM</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html#company">Studio</a></li>
+    <li><a href="thegame.html" class="active">Game</a></li>
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<section class="hero" id="top">
+  <div class="hero-grid"></div>
+  <div class="hero-lines"></div>
+  <div class="hero-bg-word">RACE</div>
+
+  <div class="hero-corner">
+    <span class="hero-corner-label">Status</span>
+    <span class="hero-corner-value">In Development</span>
+    <div class="corner-divider"></div>
+    <span class="hero-corner-label">Genre</span>
+    <span class="hero-corner-value">Futuristic Racing</span>
+    <div class="corner-divider"></div>
+    <span class="hero-corner-label">Release Target</span>
+    <span class="hero-corner-value">2026</span>
+  </div>
+
+  <div class="hero-eyebrow">Upcoming Yet Untitled Game</div>
+
+  <h1 class="hero-title">
+    HOVER RACING<br>
+    <span class="line2">GAME</span>
+  </h1>
+<!-- <div class="hero-eyebrow">Yet Untitled</div> -->
+  <p class="hero-sub">
+    A futuristic racing game about high speed, precise control, and unique hover vehicles built around custom physics and a performance-first production pipeline.
+  </p>
+
+  <div class="hero-ctas">
+    <a href="#overview" class="btn btn-primary">About the Game</a>
+    <a href="#roadmap" class="btn btn-ghost">Roadmap</a>
+  </div>
+</section>
+
+<section class="overview" id="overview">
+  <div class="overview-grid">
+    <div>
+      <div class="section-label reveal">About the Game</div>
+      <h2 class="section-title reveal">Fast, precise,<br>built from scratch.</h2>
+
+      <div class="overview-text reveal">
+        <p>
+          The game is a near-future racing project focused on hovercraft-like machines moving at high speed over diverse environments. The core idea is simple: fast races, responsive control, and vehicles that feel different from standard wheeled racing games.
+        </p>
+
+        <p>
+          Races take place in futuristic and natural locations — landscapes, technical routes, and varied tracks designed for speed, flow, and visual scale.
+        </p>
+
+        <p>
+          The project uses custom vehicle physics built from scratch, custom development tools, and proven visual production methods. The goal is not to overpromise, but to make a focused racing game with a strong technical foundation.
+        </p>
+      </div>
+    </div>
+
+    <div class="specs-panel reveal">
+      <div class="spec-row">
+        <span class="spec-key">Genre</span>
+        <span class="spec-val">Futuristic Racing</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-key">Vehicles</span>
+        <span class="spec-val">Unique Hover Vehicle Designs</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-key">Physics</span>
+        <span class="spec-val">Custom System Built from Scratch</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-key">Locations</span>
+        <span class="spec-val">Futuristic & Natural Environments</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-key">Development</span>
+        <span class="spec-val">Custom Tools & Optimized Pipeline</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-key">Target</span>
+        <span class="spec-val">2026 Release</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="media" id="media">
+  <div class="media-bg-text">MEDIA</div>
+
+  <div class="media-inner">
+    <div class="section-label reveal">Screenshots</div>
+    <h2 class="section-title reveal">Work in<br>progress.</h2>
+
+    <div class="screens-grid reveal">
+
+      <div class="screen-card">
+        <img src="images/screen1.jpg" alt="Screenshot 1">
+      </div>
+
+      <div class="screen-card">
+        <video autoplay muted loop playsinline>
+          <source src="images/preview.mp4" type="video/mp4">
+        </video>
+      </div>
+
+
+      <div class="screen-card">
+        <img src="images/screen2.jpg" alt="Screenshot 2">
+      </div>
+
+
+
+
+      
+    </div>
+  </div>
+</section>
+
+<section class="features" id="features">
+  <div class="section-label reveal">Core Pillars</div>
+  <h2 class="section-title reveal">What makes<br>it different.</h2>
+
+  <div class="features-grid reveal">
+    <div class="feature-card">
+      <div class="feature-num">01</div>
+      <div class="feature-title">Custom Physics</div>
+      <div class="feature-text">
+        The vehicle behavior is built around a custom hover physics system, designed specifically for high-speed racing.
+      </div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-num">02</div>
+      <div class="feature-title">Precise Control</div>
+      <div class="feature-text">
+        The handling is focused on responsiveness, readable motion, and control at speed — not just visual spectacle.
+      </div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-num">03</div>
+      <div class="feature-title">Unique Vehicles</div>
+      <div class="feature-text">
+        Vehicle designs are created specifically for this world: futuristic racing machines with their own character.
+      </div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-num">04</div>
+      <div class="feature-title">Various Tracks</div>
+      <div class="feature-text">
+        Tracks are built for high-speed and low-speed corners, altitude changes, long turns, technical sections, and wide environmental scale.
+      </div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-num">05</div>
+      <div class="feature-title">Custom Tools</div>
+      <div class="feature-text">
+        Parts of the production pipeline are supported by custom tools for terrain, data processing, and gameplay systems.
+      </div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-num">06</div>
+      <div class="feature-title">Performance First</div>
+      <div class="feature-text">
+        The game is being optimized for many racing vehicles active at the same time, with systems designed to scale from the start.
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="roadmap" id="roadmap">
+  <div class="roadmap-grid">
+    <div>
+      <div class="section-label reveal">Roadmap</div>
+      <h2 class="section-title reveal">Development<br>timeline.</h2>
+
+      <div class="roadmap-note reveal">
+        <p>
+          The project has been in active development since 2023. It started as a racing prototype and gradually evolved into a custom technology project with its own physics, tools, and production pipeline.
+        </p>
+        <p>
+          The current goal is a 2026 release, followed by free content updates through the end of the year.
+        </p>
+      </div>
+    </div>
+
+    <div class="roadmap-list reveal">
+      <div class="roadmap-item">
+        <div class="roadmap-time">2023</div>
+        <div>
+          <div class="roadmap-title">Early Prototyping</div>
+          <div class="roadmap-desc">
+            Initial concept, gameplay prototypes, vehicle control experiments, and selection of core tools and engine workflow.
+          </div>
+        </div>
+      </div>
+
+      <div class="roadmap-item">
+        <div class="roadmap-time">2024</div>
+        <div>
+          <div class="roadmap-title">Core Systems & Direction</div>
+          <div class="roadmap-desc">
+            First stable racing prototypes, track logic, handling iteration, and the decision to move beyond default physics solutions.
+            <br>
+            IKAGAM domain registered.
+          </div>
+        </div>
+      </div>
+
+      <div class="roadmap-item">
+        <div class="roadmap-time">2025</div>
+        <div>
+          <div class="roadmap-title">Custom Technology & Pipeline</div>
+          <div class="roadmap-desc">
+            Development of custom hover physics, custom tools, height sampling systems, terrain workflows, and performance-focused production pipelines.
+          </div>
+        </div>
+      </div>
+
+      <div class="roadmap-item">
+        <div class="roadmap-time">Early 2026</div>
+        <div>
+          <div class="roadmap-title">Game Foundation</div>
+          <div class="roadmap-desc">
+            Stable race flow, gates, lap timing, UI feedback, vehicle architecture, and first complete playable loops.
+            <br>
+            LLC registered.
+          </div>
+        </div>
+      </div>
+
+      <div class="roadmap-item">
+        <div class="roadmap-time">Mid 2026</div>
+        <div>
+          <div class="roadmap-title">Playable Build</div>
+          <div class="roadmap-desc">
+            First complete vehicles and tracks, visual polish, handling balance, testing, and optimization.
+          </div>
+        </div>
+      </div>
+
+      <div class="roadmap-item">
+        <div class="roadmap-time">2026</div>
+        <div>
+          <div class="roadmap-title">Initial Release</div>
+          <div class="roadmap-desc">
+            Release of the core racing experience: high-speed hover vehicles, custom physics, and diverse racing environments.
+          </div>
+        </div>
+      </div>
+
+      <div class="roadmap-item">
+        <div class="roadmap-time">2026 Updates</div>
+        <div>
+          <div class="roadmap-title">Free Content Updates</div>
+          <div class="roadmap-desc">
+            New vehicles, new tracks, new game modes, gameplay improvements, balancing, and visual refinements throughout the year.
+          </div>
+        </div>
+      </div>
+
+      <div class="roadmap-item">
+        <div class="roadmap-time">Winter 2026–2027</div>
+        <div>
+          <div class="roadmap-title">Multiplayer</div>
+          <div class="roadmap-desc">
+            Online racing, synchronization systems, competitive features, and network-focused testing.
+          </div>
+        </div>
+      </div>
+
+      <div class="roadmap-item">
+        <div class="roadmap-time">2027</div>
+        <div>
+          <div class="roadmap-title">Expansion Phase</div>
+          <div class="roadmap-desc">
+            VR support, extended player statistics, analytics, and vehicle customization systems.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="contact-section" id="contact">
+  <div class="section-label">Contact</div>
+  <h2 class="section-title" style="margin-bottom:10px;">Get in touch.</h2>
+  <p style="color:#888;font-size:16px;font-weight:300;letter-spacing:0.05em;margin-bottom:10px;">
+    Press inquiries, partnerships, collaboration.
+  </p>
+  <a href="mailto:contact@ikagam.com" class="contact-email">contact@ikagam.com</a>
+
+  <br>
+
+  <div style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap;">
+    <a href="index.html" class="btn btn-ghost">Back to main page</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">IKA<span>GAM</span> LLC</div>
+  <div class="footer-copy">© 2026 IKAGAM LLC. All rights reserved.</div>
+  <div class="footer-links">
+    <a href="index.html#company">Studio</a>
+    <a href="#top">Game</a>
+    <a href="index.html#about">About</a>
+    <a href="privacy.html">Privacy Policy</a>
+  </div>
+</footer>
+
+<script>
+const reveals = document.querySelectorAll('.reveal');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1 });
+
+reveals.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
